@@ -17,12 +17,6 @@ declare global {
 // In production you should set this in your deployment environment.
 const MONGODB_URI = process.env.MONGODB_URI;
 
-if (!MONGODB_URI) {
-  throw new Error(
-    "Please define the MONGODB_URI environment variable in your environment or .env.local file.",
-  );
-}
-
 // Reuse the existing cache if it exists (important in development with Next.js hot reloading)
 const cached: MongooseCache = globalThis._mongooseCache ?? {
   conn: null,
@@ -53,6 +47,13 @@ export async function connectToDatabase(): Promise<typeof mongoose> {
       // Add any desired Mongoose options here
       bufferCommands: false,
     };
+
+    //validate mondodb uri connection exists
+    if (!MONGODB_URI) {
+      throw new Error(
+        "Please define the MONGODB_URI environment variable in your environment or .env.local file."
+      );
+    }
 
     cached.promise = mongoose.connect(MONGODB_URI!, options).then((mongooseInstance) => {
       return mongooseInstance;
