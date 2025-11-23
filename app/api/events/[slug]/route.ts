@@ -2,11 +2,22 @@ import { NextResponse, type NextRequest } from "next/server";
 import { connectToDatabase } from "@/lib/mongodb";
 import Event from "@/database/event.model";
 
-// Basic runtime validation for slug to avoid malformed queries
+/**
+ * Determines whether a value is a non-empty string usable as a slug.
+ *
+ * @param slug - Value to validate as a slug
+ * @returns `true` if `slug` is a string with at least one non-whitespace character, `false` otherwise.
+ */
 function isValidSlug(slug: unknown): slug is string {
   return typeof slug === "string" && slug.trim().length > 0;
 }
 
+/**
+ * Fetches an Event by its slug route parameter and returns it as JSON.
+ *
+ * @param context - Object whose `params` promise resolves to `{ slug }` extracted from the route.
+ * @returns A NextResponse whose JSON body is `{ event }` with status 200 when found; otherwise a JSON error object with status 400 (invalid slug), 404 (not found), or 500 (server error).
+ */
 export async function GET(request: NextRequest, context: { params: Promise<{ slug: string }> }): Promise<NextResponse> {
   const params = await context.params;
   const slug = params.slug;
