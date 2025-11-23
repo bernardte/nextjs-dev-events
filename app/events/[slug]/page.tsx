@@ -4,6 +4,7 @@ import { IEvent } from "@/database/event.model";
 import { getSimilarEventBySlug } from "@/lib/actions/event.actions";
 import Image from "next/image";
 import { notFound } from "next/navigation";
+import { cacheLife } from "next/cache";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
@@ -52,6 +53,8 @@ const EventDetailPage = async ({
 }: {
   params: Promise<{ slug: string }>;
 }) => {
+  'use cache'
+  cacheLife("hours");
   const bookings = 10;
 
   const { slug } = await params;
@@ -71,6 +74,7 @@ const EventDetailPage = async ({
 
   const {
     event: {
+      _id,
       description,
       image,
       overview,
@@ -134,9 +138,7 @@ const EventDetailPage = async ({
 
           <EventAgendaItem
             agendaItems={
-              Array.isArray(agenda) && agenda.length > 0
-                ? agenda
-                : []
+              Array.isArray(agenda) && agenda.length > 0 ? agenda : []
             }
           />
 
@@ -146,11 +148,7 @@ const EventDetailPage = async ({
           </section>
 
           <EventTags
-            tags={
-              Array.isArray(tags) && tags.length > 0
-                ? tags
-                : []
-            }
+            tags={Array.isArray(tags) && tags.length > 0 ? tags : []}
           />
         </div>
         {/* Right Side - Booking Form */}
@@ -165,7 +163,7 @@ const EventDetailPage = async ({
               <p className="text-sm">Be the first to book your spot!</p>
             )}
 
-            <BookEvent />
+            <BookEvent eventId={_id.toString()} slug={slug} />
           </div>
         </aside>
       </div>
@@ -173,9 +171,10 @@ const EventDetailPage = async ({
       <div className="flex w-full flex-col gap-4 pt-20">
         <h2>Similar Events</h2>
         <div className="events">
-          {similarEvents.length > 0 && similarEvents.map((similarEvent: IEvent) => (
-            <EventCard key={similarEvent._id.toString()} {...similarEvent} />
-          ))}
+          {similarEvents.length > 0 &&
+            similarEvents.map((similarEvent: IEvent) => (
+              <EventCard key={similarEvent._id.toString()} {...similarEvent} />
+            ))}
         </div>
       </div>
     </section>

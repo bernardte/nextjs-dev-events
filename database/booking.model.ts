@@ -17,11 +17,16 @@ const bookingSchema = new Schema(
       trim: true,
       lowercase: true,
     },
+    slug: {
+      type: String,
+      required: true, // or false if optional
+      trim: true,
+    },
   },
   {
     timestamps: true, // Automatically manages createdAt and updatedAt
     strict: true,
-  },
+  }
 );
 
 // TypeScript type representing a Booking document

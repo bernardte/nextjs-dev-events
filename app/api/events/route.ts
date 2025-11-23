@@ -15,7 +15,7 @@ import Event from "@/database/event.model";
  */
 export async function POST(req: NextRequest) {
   try {
-    await connectToDatabase();
+    await connectToDatabase();  
 
     // Parse the form data from the request
     const formData = await req.formData();
@@ -68,6 +68,9 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
+
+    console.log("tags Array: ", tags)
+    console.log("agenda Array: ", agenda)
 
     const arrayBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
