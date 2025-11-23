@@ -1,4 +1,13 @@
-export const events = [
+export interface IEventPreview {
+  slug: string;
+  image: string;
+  title: string;
+  location: string;
+  date: string;
+  time: string;
+}
+
+export const events: IEventPreview[] = [
   {
     slug: "react-conf-2024",
     image: "/images/event1.png",

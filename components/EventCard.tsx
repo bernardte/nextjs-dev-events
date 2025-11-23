@@ -1,14 +1,10 @@
+import { IEventPreview } from "@/lib/constants";
 import Image from "next/image";
 import Link from "next/link";
 
-interface EventCardProps {
-    title: string;
-    image: string;
-    slug: string;
-    location: string;
-    date: string;
-    time: string;
-}
+export type EventCardProps = IEventPreview;
+ 
+
 
 const EventCard = ({ title, image, slug, location, date, time }: EventCardProps) => {
 return (
