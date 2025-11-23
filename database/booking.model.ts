@@ -1,5 +1,5 @@
 import { Schema, model, models, type HydratedDocument, type InferSchemaType } from "mongoose";
-import { Event } from "./event.model";
+import Event from "./event.model";
 import type { Model } from "mongoose";
 
 // Booking schema definition with strong TypeScript types inferred from the schema
@@ -75,7 +75,7 @@ bookingSchema.index({ eventId: 1, createdAt: -1 });
 // Create index on email for user booking lookup
 bookingSchema.index({ email: 1 });
 
-export const Booking: Model<Booking> =
+const Booking: Model<Booking> =
   models.Booking ?? model<Booking>("Booking", bookingSchema);
 
 export default Booking;
